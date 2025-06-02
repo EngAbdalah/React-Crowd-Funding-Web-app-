@@ -1,6 +1,6 @@
-from django.urls import path
-from .views import report_comment
+from django.urls import path, include
+from django.conf import settings
 urlpatterns = [
     
-    path('report_comment/', report_comment, name='report_comment'),
+    path('api/', include('moderations.api.urls')),
 ]

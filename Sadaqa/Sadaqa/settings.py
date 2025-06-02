@@ -36,6 +36,9 @@ INSTALLED_APPS = [
     # Local apps
     "users.apps.UsersConfig",
     "projects.apps.ProjectsConfig",
+    "engagement.apps.EngagementConfig",
+    "moderations.apps.ModerationsConfig",
+    # =========================================
     "crispy_forms",
     "crispy_bootstrap5",
     # Django core apps
@@ -51,6 +54,7 @@ INSTALLED_APPS = [
     "rest_framework.authtoken",
     "dj_rest_auth",
     "dj_rest_auth.registration",
+    "rest_framework_simplejwt",
     "phonenumber_field",  # Adds phone number validation and formatting.
     "django_countries",  # Simplifies country dropdowns and data storage (e.g., "EG" for Egypt).
     # need to install pip install django-allauth to use the apps below

@@ -1,7 +1,16 @@
+# generics: Pre-built DRF views for common API patterns
+# permissions: Tools to control API access (login requirements)
 from rest_framework import generics, permissions
+
+# Response: DRF's enhanced HTTP response builder
 from rest_framework.response import Response
+
+# HTTP status codes (like 200 OK, 201 Created)
 from rest_framework import status
+
+# get_user_model: Safe way to get the project's custom user model
 from django.contrib.auth import get_user_model
+
 from .serializers import CustomUserSerializer, CustomUserRegisterSerializer
 
 User = get_user_model()  # to get the correct model dynamically
@@ -16,6 +25,8 @@ class UserDetailAPI(generics.RetrieveUpdateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     # Overrides the method that fetches the object to update or retrieve.
+    # This ensures that /user/ always refers to the currently authenticated user,
+    #  not a specific ID like /user/5/.
     def get_object(self):
         return self.request.user
 
@@ -27,8 +38,8 @@ class RegisterAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = User.objects.create_user(
-            username=serializer.validated_data["username"],
             email=serializer.validated_data["email"],
+            username=serializer.validated_data["username"],
             password=serializer.validated_data["password1"],
             first_name=serializer.validated_data["first_name"],
             last_name=serializer.validated_data["last_name"],

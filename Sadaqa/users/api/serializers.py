@@ -3,10 +3,13 @@ from ..models import CustomUser
 
 
 # Convert CustomUser model objects into JSON format (for APIs).
+# ModelSerializer: Automatically handles model relationships and field validation
 class CustomUserSerializer(serializers.ModelSerializer):
-    class Meta:
+
+    class Meta:  # Meta: Configuration class for the serializer
         model = CustomUser
-        fields = [
+        # fields: Lists which model fields to include in JSON
+        fields = [ 
             "id",
             "email",
             "username",
@@ -17,6 +20,11 @@ class CustomUserSerializer(serializers.ModelSerializer):
             "pic",
             "country",
         ]
+
+        # a dictionary where you can give special instructions for specific fields.
+        # password field, allow it only when someone is sending data 
+        # (like registering or updating their password),
+        #  but never show it when the API sends back data.”
         extra_kwargs = {"password": {"write_only": True}}
 
     def validate_phone(self, value):

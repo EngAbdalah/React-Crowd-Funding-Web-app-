@@ -1,0 +1,13 @@
+### Django Core ###
+# Python bytecode cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+### Virtual Environment ###
+.venv/                  # Virtual environment (common name)
+env/                    # Virtual environment (alt name)
+venv/                   # Virtual environment (alt name)
+.python-version         # Pyenv version file
+**/__pycache__/
