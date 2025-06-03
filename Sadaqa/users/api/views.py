@@ -1,58 +1,120 @@
-# generics: Pre-built DRF views for common API patterns
-# permissions: Tools to control API access (login requirements)
-from rest_framework import generics, permissions
-
-# Response: DRF's enhanced HTTP response builder
+from rest_framework import generics, permissions, status
 from rest_framework.response import Response
+from django.contrib.auth import get_user_model, logout
+from rest_framework.views import APIView
+from django.contrib.auth.forms import PasswordResetForm
+from django.conf import settings
+from .serializers import (
+    CustomUserSerializer,
+    CustomUserRegisterSerializer,
+    PasswordChangeSerializer,
+    AccountDeleteSerializer,
+)
 
-# HTTP status codes (like 200 OK, 201 Created)
-from rest_framework import status
-
-# get_user_model: Safe way to get the project's custom user model
-from django.contrib.auth import get_user_model
-
-from .serializers import CustomUserSerializer, CustomUserRegisterSerializer
-
-User = get_user_model()  # to get the correct model dynamically
-# know my customuser because of in settings.py has AUTH_USER_MODEL = "users.CustomUser"
+User = get_user_model()
 
 
-# Defines an API endpoint
-# that allows retrieving (GET) and updating (PUT/PATCH) a user’s data.
 class UserDetailAPI(generics.RetrieveUpdateAPIView):
     queryset = User.objects.all()
     serializer_class = CustomUserSerializer
     permission_classes = [permissions.IsAuthenticated]
 
-    # Overrides the method that fetches the object to update or retrieve.
-    # This ensures that /user/ always refers to the currently authenticated user,
-    #  not a specific ID like /user/5/.
     def get_object(self):
         return self.request.user
+
+    def update(self, request, *args, **kwargs):
+        # Prevent accidental password updates
+        request.data.pop("password", None)
+        return super().update(request, *args, **kwargs)
 
 
 class RegisterAPI(generics.GenericAPIView):
     serializer_class = CustomUserRegisterSerializer
+    permission_classes = [permissions.AllowAny]
 
     def post(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        user = User.objects.create_user(
-            email=serializer.validated_data["email"],
-            username=serializer.validated_data["username"],
-            password=serializer.validated_data["password1"],
-            first_name=serializer.validated_data["first_name"],
-            last_name=serializer.validated_data["last_name"],
-            phone=serializer.validated_data["phone"],
-            birthdate=serializer.validated_data["birthdate"],
-            country=serializer.validated_data["country"],
-        )
+        user = serializer.save()  # Creates inactive user account
+
         return Response(
             {
+                "detail": "Verification email sent. Please check your inbox to activate your account.",
                 "user": CustomUserSerializer(
                     user, context=self.get_serializer_context()
                 ).data,
-                "message": "User Created Successfully. Now perform Login to get your token.",
             },
             status=status.HTTP_201_CREATED,
+        )
+
+
+class ChangePasswordAPI(generics.GenericAPIView):
+    serializer_class = PasswordChangeSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = request.user
+        # Verify old password
+        if not user.check_password(serializer.validated_data["old_password"]):
+            return Response(
+                {"old_password": ["Incorrect password."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Set new password
+        user.set_password(serializer.validated_data["new_password"])
+        user.save()
+
+        return Response(
+            {"detail": "Password updated successfully"}, status=status.HTTP_200_OK
+        )
+
+
+class DeleteAccountAPI(generics.GenericAPIView):
+    serializer_class = AccountDeleteSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        user = request.user
+        # Verify password
+        if not user.check_password(serializer.validated_data["password"]):
+            return Response(
+                {"password": ["Incorrect password."]},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
+
+        # Logout and delete account
+        logout(request)
+        user.delete()
+
+        return Response(
+            {"detail": "Account deleted successfully"},
+            status=status.HTTP_204_NO_CONTENT,
+        )
+
+
+class PasswordResetAPI(APIView):
+    permission_classes = [permissions.AllowAny]
+
+    def post(self, request):
+        form = PasswordResetForm(request.data)
+        if form.is_valid():
+            form.save(
+                request=request,
+                use_https=request.is_secure(),
+                from_email=settings.DEFAULT_FROM_EMAIL,
+                email_template_name="account/email/password_reset_key_message.txt",
+            )
+            return Response(
+                {"detail": "Password reset email sent"}, status=status.HTTP_200_OK
+            )
+        return Response(
+            {"error": "Password reset failed", "errors": form.errors.as_json()},
+            status=status.HTTP_400_BAD_REQUEST,
         )

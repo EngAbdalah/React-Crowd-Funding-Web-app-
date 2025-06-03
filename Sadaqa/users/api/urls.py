@@ -1,14 +1,17 @@
+# urls.py
 from django.urls import path
-from . import views
+from .views import (
+    UserDetailAPI,
+    RegisterAPI,
+    ChangePasswordAPI,
+    DeleteAccountAPI,
+    PasswordResetAPI,
+)
 
 urlpatterns = [
-    path("user/", views.UserDetailAPI.as_view(), name="api-user-detail"),
-    path("register/", views.RegisterAPI.as_view(), name="api-register"),
+    path("user/", UserDetailAPI.as_view(), name="user-detail"),
+    path("register/", RegisterAPI.as_view(), name="register"),
+    path("change-password/", ChangePasswordAPI.as_view(), name="change-password"),
+    path("delete-account/", DeleteAccountAPI.as_view(), name="delete-account"),
+    path("password-reset/", PasswordResetAPI.as_view(), name="password-reset"),
 ]
-
-
-# GET	/user/	Returns the authenticated user's details
-# PUT	/user/	Fully updates the authenticated user's data
-# PATCH	/user/	Partially updates the authenticated user's data
-
-# POST	/register/	Creates a new user if valid

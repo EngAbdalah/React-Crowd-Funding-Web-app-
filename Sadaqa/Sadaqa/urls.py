@@ -24,6 +24,7 @@ urlpatterns = [
     path("", include("projects.urls")),
     path("engagement/api/", include("engagement.urls")),
     path("moderations/", include("moderations.urls")),
+    path("donations/", include("donation.urls")),
     
     path("api/token/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
     path("api/token/refresh/", TokenRefreshView.as_view(), name="token_refresh"),

@@ -1,0 +1,26 @@
+
+
+
+
+
+{% extends "base.html" %}
+
+{% block title %}Donation Successful{% endblock %}
+
+{% block content %}
+<div class="alert alert-success">
+    <h4>Thank you for your donation!</h4>
+    <p>Your contribution has been received successfully.</p>
+    <a href="{% url 'create_donation' %}" class="btn btn-primary">
+        Make Another Donation
+    </a>
+</div>
+{% endblock %}
+
+
+
+
+
+
+
+

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     "projects.apps.ProjectsConfig",
     "engagement.apps.EngagementConfig",
     "moderations.apps.ModerationsConfig",
+    "donation.apps.DonationConfig",
     # =========================================
     "crispy_forms",
     "crispy_bootstrap5",
@@ -70,12 +71,13 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 SOCIALACCOUNT_PROVIDERS = {
-    "facebook": {  # Configure Facebook login
-        "APP": {  # Link to your Facebook app
-            "client_id": "YOUR_FACEBOOK_APP_ID",  # Your Facebook app’s public ID
-            "secret": "YOUR_FACEBOOK_APP_SECRET",  # Your Facebook app’s private key
-            "scope": "email",  # Ask Facebook for the user’s email address
-        }
+    "facebook": {
+        "APP": {...},
+        "METHOD": "oauth2",
+        "SCOPE": ["email", "public_profile"],
+        "EXCHANGE_TOKEN": True,
+        "VERIFIED_EMAIL": True,
+        "VERSION": "v13.0",
     }
 }
 MIDDLEWARE = [
@@ -215,21 +217,36 @@ ACCOUNT_FORMS = {"signup": "users.forms.CustomSignupForm"}
 
 SOCIALACCOUNT_AUTO_SIGNUP = True
 
-# Optional: Allow email + username login
-ACCOUNT_AUTHENTICATION_METHOD = "username_email"
+
+# Ensures phone numbers are validated specifically for Egypt
+# Works with phonenumber_field package
+PHONENUMBER_DEFAULT_REGION = "EG"  # Validate as Egyptian numbers
+
+
+# =================== email settings =====================
+ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # Force email verification
 ACCOUNT_EMAIL_REQUIRED = True
-ACCOUNT_USERNAME_REQUIRED = True
-ACCOUNT_EMAIL_VERIFICATION = "optional"
+ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1  # 24h expiration
+ACCOUNT_CONFIRM_EMAIL_ON_GET = True  # Immediate confirmation on link click
+ACCOUNT_AUTHENTICATION_METHOD = "email"  # Login with email
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
+# When Django app tries to send an email (like for password reset or confirmation),
+# instead of actually sending it, Django will just print the email content in the console (terminal).
+EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # Dev only
 
-EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
-EMAIL_HOST = "localhost"  # or your SMTP server
-EMAIL_PORT = 25  # or 587 for TLS
-EMAIL_USE_TLS = True  # or False
-EMAIL_HOST_USER = ""
-EMAIL_HOST_PASSWORD = ""
+ACCOUNT_DELETE_CONFIRMATION = True  
+ACCOUNT_DELETE_PASSWORD_CONFIRMATION = True  
 
-EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"
+# ====================For production===============================
+# EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'your-smtp-server.com'
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_HOST_USER = 'your@email.com'
+# EMAIL_HOST_PASSWORD = 'your-password'
+
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
