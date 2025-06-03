@@ -28,13 +28,16 @@ def project_detail(request, pk):
     serializer = ProjectSerializer(project)
     return Response(serializer.data)
 
-@api_view(['POST'])
+
+@api_view(["POST"])
+@permission_classes([IsAuthenticated])
 def project_create(request):
-    serializer = ProjectSerializer(data=request.data)
+    serializer = ProjectSerializer(data=request.data, context={"request": request})
     if serializer.is_valid():
-        serializer.save()
+        serializer.save(user=request.user)
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 @api_view(['PUT'])
 def project_update(request, pk):
