@@ -1,5 +1,5 @@
 # urls.py
-from django.urls import path
+from django.urls import path, include
 from .views import (
     UserDetailAPI,
     RegisterAPI,
@@ -14,4 +14,5 @@ urlpatterns = [
     path("change-password/", ChangePasswordAPI.as_view(), name="change-password"),
     path("delete-account/", DeleteAccountAPI.as_view(), name="delete-account"),
     path("password-reset/", PasswordResetAPI.as_view(), name="password-reset"),
+    path("dj-rest-auth/", include("dj_rest_auth.urls")),
 ]
