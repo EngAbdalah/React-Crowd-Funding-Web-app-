@@ -1,23 +1,38 @@
-import logo from './logo.svg';
+import { useState } from 'react';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import LanguageContext from './context/LanguageContext';
+import MyNavBar from './components/MyNavBar';
+import Home from './components/Home';
+import LoginForm from './components/LoginForm';
+import RegisterForm from './components/RegisterForm';
+import NotFound from './components/NotFound';
 import './App.css';
 
-function App() {
+function App()
+{
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+
+      {/* language change from arabic to english */}
+      {/* */}
+        <BrowserRouter>
+          {/* <MyNavBar /> */}
+          {/* <categorylist />*/}
+          <div className='container'>
+            <Routes>
+              {/* <Route path="/" element={<Home />} />
+              <Route path="/login" element={<LoginForm />} />
+              <Route path="/register" element={<LoginForm />} />
+              <Route path="/profile" element={<profile_update />} />
+              <Route path="/category/:id" element={<category />
+              <Route path="/donate/:id" element={<donate/> } />
+              <Route path="/donate/:id" element={<report/> }
+              <Route path="*" element={<NotFound />} /> */}
+            </Routes>
+          </div>
+          {/* < /> */}
+        </BrowserRouter>
     </div>
   );
 }
