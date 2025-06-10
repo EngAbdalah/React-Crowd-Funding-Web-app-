@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "moderations.apps.ModerationsConfig",
     "donation.apps.DonationConfig",
     # =========================================
+    "corsheaders",
     "crispy_forms",
     "crispy_bootstrap5",
     # Django core apps
@@ -81,6 +82,7 @@ SOCIALACCOUNT_PROVIDERS = {
     }
 }
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django.middleware.security.SecurityMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -88,9 +90,12 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-
     # Add allauth's middleware here
     "allauth.account.middleware.AccountMiddleware",
+]
+
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:3000",
 ]
 
 ROOT_URLCONF = 'Sadaqa.urls'
