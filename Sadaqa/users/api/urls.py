@@ -7,6 +7,8 @@ from .views import (
     DeleteAccountAPI,
     PasswordResetAPI,
 )
+from dj_rest_auth.views import PasswordResetConfirmView
+
 
 urlpatterns = [
     path("user/", UserDetailAPI.as_view(), name="user-detail"),
@@ -15,5 +17,10 @@ urlpatterns = [
     path("delete-account/", DeleteAccountAPI.as_view(), name="delete-account"),
     path("password-reset/", PasswordResetAPI.as_view(), name="password-reset"),
     path("dj-rest-auth/", include("dj_rest_auth.urls")),
+    path(
+        "dj-rest-auth/password/reset/confirm/<uidb64>/<token>/",
+        PasswordResetConfirmView.as_view(),
+        name="password_reset_confirm",
+    ),
     path("dj-rest-auth/registration/", include("dj_rest_auth.registration.urls")),
 ]
