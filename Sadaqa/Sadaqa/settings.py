@@ -199,7 +199,6 @@ REST_FRAMEWORK = {
 REST_USE_JWT = True
 JWT_AUTH_COOKIE = "jwt-auth" 
 JWT_AUTH_REFRESH_COOKIE = "jwt-refresh"  
-
 SITE_ID = 1
 
 CRISPY_TEMPLATE_PACK = "bootstrap5"
@@ -234,7 +233,7 @@ ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # Force email verification
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1  # 24h expiration
 ACCOUNT_CONFIRM_EMAIL_ON_GET = False  
-ACCOUNT_AUTHENTICATION_METHOD = "email"  # Login with email
+ACCOUNT_LOGIN_METHODS = ["email"]  # Login with email
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
 
@@ -256,3 +255,8 @@ ACCOUNT_DELETE_PASSWORD_CONFIRMATION = True
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+
+DJ_REST_AUTH = {
+    "PASSWORD_RESET_CONFIRM_URL": "password-reset-confirm/{uid}/{token}/",
+}
