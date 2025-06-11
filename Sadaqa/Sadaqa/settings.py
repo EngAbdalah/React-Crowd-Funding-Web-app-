@@ -180,9 +180,9 @@ AUTH_USER_MODEL = "users.CustomUser"
 # Django REST Framework Configuration
 REST_FRAMEWORK = {
     "DEFAULT_AUTHENTICATION_CLASSES": [
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.BasicAuthentication",
         "dj_rest_auth.jwt_auth.JWTCookieAuthentication",
+        # "rest_framework.authentication.SessionAuthentication",
+        # "rest_framework.authentication.BasicAuthentication",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticatedOrReadOnly",
@@ -197,7 +197,8 @@ REST_FRAMEWORK = {
 
 # Sites Framework (if using social auth or flatpages)
 REST_USE_JWT = True
-JWT_AUTH_COOKIE = "sadaqa-auth"
+JWT_AUTH_COOKIE = "jwt-auth" 
+JWT_AUTH_REFRESH_COOKIE = "jwt-refresh"  
 
 SITE_ID = 1
 
@@ -232,7 +233,7 @@ PHONENUMBER_DEFAULT_REGION = "EG"  # Validate as Egyptian numbers
 ACCOUNT_EMAIL_VERIFICATION = "mandatory"  # Force email verification
 ACCOUNT_EMAIL_REQUIRED = True
 ACCOUNT_EMAIL_CONFIRMATION_EXPIRE_DAYS = 1  # 24h expiration
-ACCOUNT_CONFIRM_EMAIL_ON_GET = True  # Immediate confirmation on link click
+ACCOUNT_CONFIRM_EMAIL_ON_GET = False  
 ACCOUNT_AUTHENTICATION_METHOD = "email"  # Login with email
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
