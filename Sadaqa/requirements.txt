@@ -30,6 +30,8 @@ crispy-bootstrap5==0.7    # Updated to compatible version
 
 django-cors-headers
 
+dj-rest-auth[with_social]
+
 # Additional dependencies for production (optional)
 # gunicorn==21.2.0  # WSGI HTTP Server for production
 # whitenoise==6.6.0  # Static file serving for production
