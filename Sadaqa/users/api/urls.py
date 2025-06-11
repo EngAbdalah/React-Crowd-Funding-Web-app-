@@ -15,4 +15,5 @@ urlpatterns = [
     path("delete-account/", DeleteAccountAPI.as_view(), name="delete-account"),
     path("password-reset/", PasswordResetAPI.as_view(), name="password-reset"),
     path("dj-rest-auth/", include("dj_rest_auth.urls")),
+    path("dj-rest-auth/registration/", include("dj_rest_auth.registration.urls")),
 ]

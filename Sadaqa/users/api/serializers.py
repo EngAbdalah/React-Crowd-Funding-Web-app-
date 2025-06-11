@@ -100,7 +100,6 @@ class CustomUserRegisterSerializer(serializers.ModelSerializer):
             last_name=validated_data["last_name"],
             phone=validated_data["phone"],
             pic=validated_data.get("pic"),
-            is_active=False,  # Require email activation
         )
         send_email_confirmation(self.context["request"], user)
         return user

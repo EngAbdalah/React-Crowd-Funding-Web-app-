@@ -1,4 +1,6 @@
 from rest_framework import generics, permissions, status
+from allauth.account.utils import complete_signup
+from allauth.account import app_settings as allauth_settings
 from rest_framework.response import Response
 from django.contrib.auth import get_user_model, logout
 from rest_framework.views import APIView
@@ -36,6 +38,13 @@ class RegisterAPI(generics.GenericAPIView):
         serializer = self.get_serializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         user = serializer.save()  # Creates inactive user account
+
+        complete_signup(
+            request,
+            user,
+            allauth_settings.EMAIL_VERIFICATION,
+            None, 
+        )
 
         return Response(
             {
