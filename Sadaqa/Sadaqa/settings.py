@@ -209,8 +209,12 @@ LOGIN_REDIRECT_URL = 'categories-list-page'
 ACCOUNT_LOGOUT_REDIRECT_URL = "categories-list-page"
 ACCOUNT_SIGNUP_REDIRECT_URL = LOGIN_REDIRECT_URL
 
-ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = LOGIN_REDIRECT_URL
-ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = LOGIN_REDIRECT_URL
+ACCOUNT_EMAIL_CONFIRMATION_AUTHENTICATED_REDIRECT_URL = (
+    "http://localhost:3000/confirm-email/?key={key}"
+)
+ACCOUNT_EMAIL_CONFIRMATION_ANONYMOUS_REDIRECT_URL = (
+    "http://localhost:3000/confirm-email/?key={key}"
+)
 
 ACCOUNT_PASSWORD_RESET_REDIRECT_URL = "account_reset_password"
 ACCOUNT_PASSWORD_RESET_DONE_REDIRECT_URL = LOGIN_REDIRECT_URL
@@ -236,7 +240,7 @@ ACCOUNT_CONFIRM_EMAIL_ON_GET = False
 ACCOUNT_LOGIN_METHODS = ["email"]  # Login with email
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_USER_MODEL_USERNAME_FIELD = None
-
+ACCOUNT_EMAIL_CONFIRMATION_URL = "http://localhost:3000/confirm-email/{key}/"
 # When Django app tries to send an email (like for password reset or confirmation),
 # instead of actually sending it, Django will just print the email content in the console (terminal).
 EMAIL_BACKEND = "django.core.mail.backends.console.EmailBackend"  # Dev only

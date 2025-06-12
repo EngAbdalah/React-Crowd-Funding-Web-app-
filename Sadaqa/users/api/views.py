@@ -12,6 +12,8 @@ from .serializers import (
     PasswordChangeSerializer,
     AccountDeleteSerializer,
 )
+from rest_framework.exceptions import ValidationError
+from allauth.account.models import EmailConfirmation, EmailConfirmationHMAC
 
 User = get_user_model()
 
@@ -127,3 +129,29 @@ class PasswordResetAPI(APIView):
             {"error": "Password reset failed", "errors": form.errors.as_json()},
             status=status.HTTP_400_BAD_REQUEST,
         )
+
+
+class CustomConfirmEmailView(APIView):
+
+    # Custom email confirmation view that returns JSON response instead of redirecting to a template.
+
+    def get(self, request, key, *args, **kwargs):
+        confirmation = self._get_confirmation_object(key)
+        if not confirmation:
+            raise ValidationError({"detail": "Invalid or expired confirmation key."})
+
+        confirmation.confirm(request)
+        return Response(
+            {"detail": "Email confirmed successfully."}, status=status.HTTP_200_OK
+        )
+
+    def _get_confirmation_object(self, key):
+        # Try HMAC confirmation first (default method used)
+        confirmation = EmailConfirmationHMAC.from_key(key)
+        if not confirmation:
+            # If not HMAC, fall back to DB-stored confirmation (e.g., from older methods)
+            try:
+                confirmation = EmailConfirmation.objects.get(key=key.lower())
+            except EmailConfirmation.DoesNotExist:
+                confirmation = None
+        return confirmation

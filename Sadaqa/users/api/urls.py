@@ -6,6 +6,7 @@ from .views import (
     ChangePasswordAPI,
     DeleteAccountAPI,
     PasswordResetAPI,
+    CustomConfirmEmailView,
 )
 from dj_rest_auth.views import PasswordResetConfirmView
 
@@ -21,6 +22,11 @@ urlpatterns = [
         "dj-rest-auth/password/reset/confirm/<uidb64>/<token>/",
         PasswordResetConfirmView.as_view(),
         name="password_reset_confirm",
+    ),
+    path(
+        "dj-rest-auth/registration/account-confirm-email/<str:key>/",
+        CustomConfirmEmailView.as_view(),
+        name="account_confirm_email",
     ),
     path("dj-rest-auth/registration/", include("dj_rest_auth.registration.urls")),
 ]
