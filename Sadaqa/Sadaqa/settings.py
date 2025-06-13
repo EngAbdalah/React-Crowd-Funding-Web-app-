@@ -264,3 +264,5 @@ MEDIA_ROOT = BASE_DIR / "media"
 DJ_REST_AUTH = {
     "PASSWORD_RESET_CONFIRM_URL": "password-reset-confirm/{uid}/{token}/",
 }
+
+ACCOUNT_AUTHENTICATION_METHOD = "email"
