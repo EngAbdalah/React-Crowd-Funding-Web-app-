@@ -7,6 +7,8 @@ import ForgotPasswordPage from './pages/users/account/ForgotPasswordPage';
 import ConfirmEmailPage from './pages/users/account/ConfirmEmailPage';
 import ChangePasswordPage from './pages/users/account/ChangePasswordPage';
 import DeleteAccountPage from './pages/users/account/DeleteAccountPage';
+
+import NavBar from './components/NavBar'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const NotFound = () => (
@@ -29,7 +31,7 @@ function App()
       {/* language change from arabic to english */}
       {/* */}
         <BrowserRouter>
-          {/* <MyNavBar /> */}
+          <NavBar /> 
           {/* <categorylist />*/}
           <div className='container py-4'>
             <Routes>
