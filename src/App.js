@@ -10,6 +10,8 @@ import DeleteAccountPage from './pages/users/account/DeleteAccountPage';
 
 import NavBar from './components/NavBar'
 import 'bootstrap/dist/css/bootstrap.min.css';
+import ReportsList from './pages/moderations/pages/ReportsList';
+import ReportDetails from './pages/moderations/pages/ReportDetails';
 
 const NotFound = () => (
   <div className="d-flex justify-content-center align-items-center vh-100">
@@ -48,7 +50,10 @@ function App()
               {/* <Route path="/donate/:id" element={<donate/> } /> */}
               {/* <Route path="/donate/:id" element={<report/> } */}
               {/* <Route path="*" element={<NotFound />} /> */} 
+            <Route path="/reports" element={<ReportsList />} />
+            <Route path="/reports/:id" element={<ReportDetails />} />
               <Route path="*" element={<NotFound />} />
+              
             </Routes>
           </div>
           {/* < /> */}
