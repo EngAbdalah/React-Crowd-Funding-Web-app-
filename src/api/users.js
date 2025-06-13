@@ -45,7 +45,16 @@ const authService = {
                 message: "Password reset email sent. Please check your inbox."
             };
         } catch (error) {
-            const errorMsg = error.response?.data?.detail || "Failed to send reset instructions.";
+            // Handle Django-style error responses
+            const errorData = error.response?.data || {};
+            let errorMsg = "Failed to send reset instructions.";
+
+            if (errorData.email) {
+                errorMsg = errorData.email[0]; 
+            } else if (errorData.non_field_errors) {
+                errorMsg = errorData.non_field_errors[0];  
+            }
+
             throw new Error(errorMsg);
         }
     },
