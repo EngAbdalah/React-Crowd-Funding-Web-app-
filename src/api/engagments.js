@@ -12,6 +12,8 @@ export const fetchReplies = async () => {
   return res.data;
 };
 
+
+
 export const fetchRates = async () => {
   const res = await axios.get(`${API_BASE}/rates/`);
   return res.data;
