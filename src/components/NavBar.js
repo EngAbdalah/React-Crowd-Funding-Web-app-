@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import styled from 'styled-components';
 import authService from '../api/users'; // Adjust the path as needed
+import API from '../api/axios';
 
 const Nav = styled.nav`
   background-color: var(--color-paper);
@@ -100,6 +101,8 @@ function Navbar() {
     const [userEmail, setUserEmail] = useState(null);
     const navigate = useNavigate();
     const location = useLocation();
+    const [categorylist, setcategorylist] = useState([]);
+
 
     useEffect(() => {
         const fetchUser = async () => {
@@ -113,9 +116,24 @@ function Navbar() {
                     navigate('/login');
                 }
             }
+
         };
 
+        const fetchCategory = async()=> {
+            const category = await API.get("/api/categories/") 
+            console.log(category);
+            
+            setcategorylist(category.data)
+
+          
+
+        }
+
+
+        
+
         fetchUser();
+        fetchCategory();
     }, [navigate]);
 
     const handleLogout = async () => {
@@ -138,7 +156,7 @@ function Navbar() {
                 <NavBrand to="/">صدقة</NavBrand>
                 <NavLinks>
                     <MainNavLinks>
-                        <NavLink to="/campaigns" className={isActive('/campaigns') ? 'active' : ''}>
+                         {/* <NavLink to="/campaigns" className={isActive('/campaigns') ? 'active' : ''}>
                             الحملات
                         </NavLink>
                         <NavLink to="/sponsorships" className={isActive('/sponsorships') ? 'active' : ''}>
@@ -149,7 +167,10 @@ function Navbar() {
                         </NavLink>
                         <NavLink to="/occasions" className={isActive('/occasions') ? 'active' : ''}>
                             المناسبات
-                        </NavLink>
+                        </NavLink> */}
+                        {categorylist?.map(category=><NavLink to={`/category/${category?.id}`} className={isActive('/education') ? 'active' : ''}>
+                            { category?.name }
+                        </NavLink>) }
                     </MainNavLinks>
                     <UserSection>
                         {userEmail ? (

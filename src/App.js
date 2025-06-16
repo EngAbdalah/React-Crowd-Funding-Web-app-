@@ -55,7 +55,7 @@ function App() {
               {/* <Route path="/" element={<HomePage />} /> */}
               <Route path="/campaigns" element={<CampaignsPage />} />
               <Route path="/sponsorships" element={<SponsorshipsPage />} />
-              <Route path="/education" element={<EducationPage />} />
+              <Route path="/category/:idm" element={<EducationPage />} />
               <Route path="/occasions" element={<OccasionsPage />} />
 
               {/* 404 Route */}
