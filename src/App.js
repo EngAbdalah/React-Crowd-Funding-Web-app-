@@ -8,18 +8,24 @@ import LoginPage from './pages/users/account/LoginPage';
 import RegisterPage from './pages/users/account/RegisterPage';
 import ProfilePage from './pages/users/account/ProfilePage';
 import ForgotPasswordPage from './pages/users/account/ForgotPasswordPage';
+
+import { ThemeProvider } from 'styled-components';
+import { theme } from './theme/theme';
+import { GlobalStyles } from './theme/globalStyles';
+
 import ConfirmEmailPage from './pages/users/account/ConfirmEmailPage';
 import ChangePasswordPage from './pages/users/account/ChangePasswordPage';
 import DeleteAccountPage from './pages/users/account/DeleteAccountPage';
 
 // Main Navigation Pages
+import HomePage from './pages/home/HomePage.jsx';
 import CampaignsPage from './pages/campaigns/CampaignsPage';
 import SponsorshipsPage from './pages/sponsorships/SponsorshipsPage';
 import EducationPage from './pages/education/EducationPage';
 import OccasionsPage from './pages/occasions/OccasionsPage';
 
-// Components
-import NavBar from './components/NavBar';
+import NavBar from './components/NavBar'
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 const NotFound = () => (
   <div className="d-flex justify-content-center align-items-center vh-100">
@@ -30,6 +36,7 @@ const NotFound = () => (
     </div>
   </div>
 );
+
 
 function App() {
   return (
@@ -50,9 +57,10 @@ function App() {
               <Route path="/delete-account" element={<DeleteAccountPage />} />
 
               {/* Main Navigation Routes */}
+              {/* <Route path="/" element={<HomePage />} /> */}
               <Route path="/campaigns" element={<CampaignsPage />} />
               <Route path="/sponsorships" element={<SponsorshipsPage />} />
-              <Route path="/education" element={<EducationPage />} />
+              <Route path="/category/:idm" element={<EducationPage />} />
               <Route path="/occasions" element={<OccasionsPage />} />
 
               {/* 404 Route */}

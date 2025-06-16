@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-
+import API from '../../api/axios';
+import { useNavigate, useParams } from 'react-router-dom';
 const PageContainer = styled.div`
   max-width: 1200px;
   margin: 0 auto;
@@ -89,6 +91,18 @@ const EducationType = styled.div`
 `;
 
 function EducationPage() {
+
+ const {idm} = useParams();
+    console.log(idm)
+
+
+
+  const geDate = (tt,ee)=>{
+
+    const dta =new Date(tt)
+    // const dta =new Date(tt)
+return dta.getFullYear()
+  }
   // Temporary mock data
   const educationInitiatives = [
     {
@@ -125,28 +139,57 @@ function EducationPage() {
       status: 'قريباً'
     }
   ];
+const [projectList,setProjectList]=useState([])
+const [cattList,setcatList]=useState([])
+const na=useNavigate([])
+  useEffect(()=>{
+
+       const fetchCategory1 = async()=> {
+        try {
+            const projectRes = await API.get(`/api/categories/${idm}/`) 
+            console.log(projectRes.data);
+setcatList(projectRes.data )
+
+        } catch (error) {
+          
+        }
+          
+             
+        }
+     const fetchCategory = async()=> {
+            const projectRes = await API.get("/api/projects/") 
+            console.log(projectRes);
+            
+            setProjectList(projectRes.data)
+
+        }
+      fetchCategory1()
+
+      fetchCategory()
+
+  },[])
 
   return (
     <PageContainer>
       <PageHeader>
-        <PageTitle>التعليم</PageTitle>
+        <PageTitle>{cattList.name}</PageTitle>
         <PageDescription>
-          نساهم في تطوير المجتمع من خلال دعم المبادرات التعليمية المختلفة
+        {cattList.name}
         </PageDescription>
       </PageHeader>
 
       <EducationGrid>
-        {educationInitiatives.map(initiative => (
-          <EducationCard key={initiative.id}>
+        {projectList.map(initiative => (
+          <EducationCard key={initiative.id} onClick={()=>{na(`/project/${initiative.id}`)}}>
             <EducationImage image={initiative.image} />
             <EducationContent>
               <EducationType>{initiative.type}</EducationType>
               <EducationTitle>{initiative.title}</EducationTitle>
-              <EducationDescription>{initiative.description}</EducationDescription>
+              <EducationDescription>{initiative.details}</EducationDescription>
               <EducationDetails>
                 <DetailItem>
                   <span>المدة:</span>
-                  <span>{initiative.duration}</span>
+                  <span>{geDate(initiative.start_date)}</span>
                 </DetailItem>
                 <DetailItem>
                   <span>الموقع:</span>

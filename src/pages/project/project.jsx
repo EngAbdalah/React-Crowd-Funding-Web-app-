@@ -2,6 +2,9 @@
     // path("api/projects/<int:pk>/", views.project_detail, name="project-detail"),
     // path("api/projects/<int:pk>/update/", views.project_update, name="project-update"),
 // path("api/projects/<int:pk>/delete/", views.project_delete, name="project-delete"),
+
+import { useParams } from "react-router-dom"
+
     
     
     // path(
@@ -45,4 +48,18 @@
 // in button component use <donate />
 // in button component use <engagment />
 // in button component use <report />
+
+
+
+export const ProjectDetailsPage = () => {
+   
+    
+    
+    
+    return (
+    <>
+
+    </>
+    )
+}
     
