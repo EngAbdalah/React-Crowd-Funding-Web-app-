@@ -1,5 +1,6 @@
 import axios from 'axios';
 
+//our server works on this:
 const API_BASE = 'http://localhost:8000';
 
 export const fetchComments = async () => {
