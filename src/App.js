@@ -22,6 +22,11 @@ import OccasionsPage from './pages/occasions/OccasionsPage';
 import NavBar from './components/NavBar'
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+// Engagement Components 
+import Comments from './components/Comments';
+import Replies from './components/Replies';
+import Rates from './components/Rates';
+
 const NotFound = () => (
   <div className="d-flex justify-content-center align-items-center vh-100">
     <div className="text-center">
