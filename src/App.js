@@ -63,6 +63,10 @@ function App() {
               <Route path="/education" element={<EducationPage />} />
               <Route path="/occasions" element={<OccasionsPage />} />
 
+          {/*  engagement routes*/}
+              <Route path="/comments" element={<Comments />} />
+              <Route path="/replies" element={<Replies />} />
+              <Route path="/rates" element={<Rates />} />
               {/* 404 Route */}
               <Route path="*" element={<NotFound />} />
             </Routes>
