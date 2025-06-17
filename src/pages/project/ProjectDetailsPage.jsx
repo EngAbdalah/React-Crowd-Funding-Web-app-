@@ -7,6 +7,9 @@ import ProjectGallery from './ProjectGallery';
 import ProjectLightbox from './ProjectLightbox';
 import ProjectTabs from './ProjectTabs';
 import SimilarProjects from './SimilarProjects';
+import ProjectDelete from './ProjectDelete';
+import ProjectUpdate from './ProjectUpdate';
+
 
 const ProjectDetailsPage = () => {
   const { id } = useParams();
@@ -60,6 +63,10 @@ const ProjectDetailsPage = () => {
   const daysLeft = project?.end_date
     ? Math.ceil((new Date(project.end_date) - new Date()) / (1000 * 60 * 60 * 24))
     : null;
+
+  const handleDeleteSuccess = () => {
+    setProject(null); // Reset project to trigger the "not found" state
+  };
 
   if (isLoading) {
     return (
@@ -145,12 +152,12 @@ const ProjectDetailsPage = () => {
                   </span>
                 </div>
                 <div>
-                  <button className="btn btn-outline-danger me-2" data-bs-toggle="tooltip" data-bs-placement="top" title="Save this project">
-                    <i className="bi bi-heart me-1"></i>Save
+                  <button className="btn danger" data-bs-toggle="tooltip" data-bs-placement="top" title="delete this project">
+                    <ProjectDelete projectId={id} onDeleteSuccess={handleDeleteSuccess} />                  </button>
+                  <button className="btn secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Share this project">
+                     <ProjectUpdate projectId={id} />
                   </button>
-                  <button className="btn btn-outline-secondary" data-bs-toggle="tooltip" data-bs-placement="top" title="Share this project">
-                    <i className="bi bi-share me-1"></i>Share
-                  </button>
+
                 </div>
               </div>
               <h1 className="card-title display-5 fw-bold mb-3">{project.title}</h1>
