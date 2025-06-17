@@ -8,24 +8,24 @@ import LoginPage from './pages/users/account/LoginPage';
 import RegisterPage from './pages/users/account/RegisterPage';
 import ProfilePage from './pages/users/account/ProfilePage';
 import ForgotPasswordPage from './pages/users/account/ForgotPasswordPage';
-
-import { ThemeProvider } from 'styled-components';
-import { theme } from './theme/theme';
-import { GlobalStyles } from './theme/globalStyles';
-
 import ConfirmEmailPage from './pages/users/account/ConfirmEmailPage';
 import ChangePasswordPage from './pages/users/account/ChangePasswordPage';
 import DeleteAccountPage from './pages/users/account/DeleteAccountPage';
 
 // Main Navigation Pages
-import HomePage from './pages/home/HomePage.jsx';
-import CampaignsPage from './pages/campaigns/CampaignsPage';
-import SponsorshipsPage from './pages/sponsorships/SponsorshipsPage';
-import EducationPage from './pages/education/EducationPage';
-import OccasionsPage from './pages/occasions/OccasionsPage';
+import ProtectedRoute from './components/ProtectedRoute';
+import HomePage from './pages/home/HomePage';
+import CategoryPage from './pages/category/category';
+import ProjectPage from './pages/project/project';
+import ProjectsPage from './pages/project/ProjectPage';
+import ProjectFormPage from './pages/project/ProjectFormPage';
+import ProjectsByCategoryPage from './pages/project/ProjectsByCategoryPage';
+import ProjectDetailsPage from './pages/project/ProjectDetailsPage';
 
-import NavBar from './components/NavBar'
+
+import NavBar from './components/NavBar';
 import 'bootstrap/dist/css/bootstrap.min.css';
+
 
 const NotFound = () => (
   <div className="d-flex justify-content-center align-items-center vh-100">
@@ -36,7 +36,6 @@ const NotFound = () => (
     </div>
   </div>
 );
-
 
 function App() {
   return (
@@ -57,12 +56,15 @@ function App() {
               <Route path="/delete-account" element={<DeleteAccountPage />} />
 
               {/* Main Navigation Routes */}
-              {/* <Route path="/" element={<HomePage />} /> */}
-              <Route path="/campaigns" element={<CampaignsPage />} />
-              <Route path="/sponsorships" element={<SponsorshipsPage />} />
-              <Route path="/category/:idm" element={<EducationPage />} />
-              <Route path="/occasions" element={<OccasionsPage />} />
-
+              <Route path="/" element={<HomePage />} />
+              <Route path="/category/:idm" element={<CategoryPage />} />
+              <Route path="/projects/all" element={<ProjectsByCategoryPage />} />
+              
+              {/* <Route path="/project/:id" element={<ProjectPage />} /> */}
+              <Route path="/projects/:id" element={<ProjectDetailsPage />} />
+              <Route path="/projects/create" element={<ProjectFormPage />} />
+              <Route path="/projects/:id/update" element={<ProjectFormPage />} />
+            
               {/* 404 Route */}
               <Route path="*" element={<NotFound />} />
             </Routes>

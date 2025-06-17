@@ -1,5 +1,7 @@
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
-import CampaignCard from '../../components/CampaignCard';
+import { API, BASE_URL } from '../../api/axios';
+import { useNavigate } from 'react-router-dom';
 
 const PageContainer = styled.div`
   max-width: 1200px;
@@ -50,95 +52,80 @@ const SectionTitle = styled.h2`
   font-size: ${props => props.theme.typography.h4.fontSize};
 `;
 
-const CampaignsGrid = styled.div`
+const CategoriesGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: ${props => props.theme.spacing.lg};
-  margin-bottom: ${props => props.theme.spacing.xl};
 `;
 
-const StatsSection = styled.section`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: ${props => props.theme.spacing.lg};
-  margin-bottom: ${props => props.theme.spacing.xl};
-`;
-
-const StatCard = styled.div`
+const CategoryCard = styled.div`
   background-color: var(--color-card);
-  padding: ${props => props.theme.spacing.lg};
-  border-radius: ${props => props.theme.borderRadius.lg};
-  text-align: center;
+  border-radius: ${props => props.theme.borderRadius.md};
   box-shadow: ${props => props.theme.shadows.md};
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
 `;
 
-const StatNumber = styled.div`
-  font-size: ${props => props.theme.typography.h3.fontSize};
+const CategoryImage = styled.img`
+  width: 100%;
+  height: 150px;
+  object-fit: cover;
+`;
+
+const CategoryContent = styled.div`
+  padding: ${props => props.theme.spacing.md};
+  text-align: center;
+`;
+
+const CategoryName = styled.h3`
   color: var(--color-primary);
-  margin-bottom: ${props => props.theme.spacing.sm};
+  font-size: ${props => props.theme.typography.h4.fontSize};
 `;
 
-const StatLabel = styled.div`
+const Loading = styled.div`
+  text-align: center;
+  font-size: ${props => props.theme.typography.h4.fontSize};
   color: var(--color-text-secondary);
-  font-size: ${props => props.theme.typography.body1.fontSize};
+  margin: ${props => props.theme.spacing.xl} 0;
 `;
 
 function HomePage() {
-  // Temporary mock data
-  const featuredCampaigns = [
-    {
-      id: 1,
-      title: 'مساعدة أسرة محتاجة',
-      description: 'توفير احتياجات أساسية لأسرة تعاني من ظروف صعبة',
-      image: 'https://via.placeholder.com/300x200',
-      category: 'مساعدة إنسانية',
-      progress: 75,
-      raised: 7500,
-      goal: 10000,
-      timeLeft: '5 أيام'
-    },
-    {
-      id: 2,
-      title: 'علاج طفل مريض',
-      description: 'توفير تكاليف العلاج لطفل يعاني من مرض مزمن',
-      image: 'https://via.placeholder.com/300x200',
-      category: 'صحة',
-      progress: 45,
-      raised: 45000,
-      goal: 100000,
-      timeLeft: '10 أيام'
-    },
-    {
-      id: 3,
-      title: 'تعليم أيتام',
-      description: 'توفير مصاريف التعليم لأطفال الأيتام',
-      image: 'https://via.placeholder.com/300x200',
-      category: 'تعليم',
-      progress: 60,
-      raised: 30000,
-      goal: 50000,
-      timeLeft: '15 يوم'
-    }
-  ];
+  const [categories, setCategories] = useState([]);
+  const [projects, setProjects] = useState([]);
+  const [pictures, setPictures] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
 
-  const stats = [
-    {
-      number: '1000+',
-      label: 'حالة تم مساعدتها'
-    },
-    {
-      number: '500+',
-      label: 'متبرع نشط'
-    },
-    {
-      number: '50+',
-      label: 'حملة ناجحة'
-    },
-    {
-      number: '100%',
-      label: 'شفافية'
-    }
-  ];
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const catRes = await API.get('/api/categories/');
+        setCategories(catRes.data);
+
+        const projRes = await API.get('/api/projects/');
+        setProjects(projRes.data);
+
+        const picsRes = await API.get('/api/project-pics/');
+        setPictures(picsRes.data);
+      } catch (error) {
+        console.error("Error fetching data:", error.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, []);
+
+  const getProjectImage = (projectId) => {
+    const pic = pictures.find(p => p.project === projectId);
+    return pic ? `${BASE_URL}${pic.pic}` : 'https://via.placeholder.com/300x150?text=Project';
+  };
 
   return (
     <PageContainer>
@@ -147,28 +134,35 @@ function HomePage() {
         <HeroDescription>
           انضم إلينا في رحلة العطاء وساعد في إسعاد المحتاجين. كل تبرع، مهما كان صغيراً، يمكن أن يحدث فرقاً كبيراً في حياة شخص ما.
         </HeroDescription>
-        <HeroButton>ابدأ التبرع الآن</HeroButton>
+        <HeroButton onClick={() => navigate('/projects')}>ابدأ التبرع الآن</HeroButton>
       </HeroSection>
 
       <section>
-        <SectionTitle>الحملات المميزة</SectionTitle>
-        <CampaignsGrid>
-          {featuredCampaigns.map(campaign => (
-            <CampaignCard key={campaign.id} campaign={campaign} />
-          ))}
-        </CampaignsGrid>
-      </section>
+        <SectionTitle>المشاريع المميزة</SectionTitle>
 
-      <StatsSection>
-        {stats.map((stat, index) => (
-          <StatCard key={index}>
-            <StatNumber>{stat.number}</StatNumber>
-            <StatLabel>{stat.label}</StatLabel>
-          </StatCard>
-        ))}
-      </StatsSection>
+        {loading ? (
+          <Loading>جاري التحميل...</Loading>
+        ) : (
+          <CategoriesGrid>
+            {projects.map(project => (
+              <CategoryCard
+                key={project.id}
+                onClick={() => navigate(`/projects/${project.id}`)}
+              >
+                <CategoryImage
+                  src={getProjectImage(project.id)}
+                  alt={project.title}
+                />
+                <CategoryContent>
+                  <CategoryName>{project.title}</CategoryName>
+                </CategoryContent>
+              </CategoryCard>
+            ))}
+          </CategoriesGrid>
+        )}
+      </section>
     </PageContainer>
   );
 }
 
-export default HomePage; 
+export default HomePage;

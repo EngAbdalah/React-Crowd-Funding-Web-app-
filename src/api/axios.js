@@ -1,7 +1,10 @@
 import axios from "axios";
 
+const BASE_URL = "http://localhost:8000/";
+
+
 const API = axios.create({
-    baseURL: "http://localhost:8000/",
+    baseURL: BASE_URL ,
     headers: { "Content-Type": "application/json" },
 });
 
@@ -82,4 +85,4 @@ API.interceptors.response.use(
     }
 );
 
-export default API;
+export { API, BASE_URL };
