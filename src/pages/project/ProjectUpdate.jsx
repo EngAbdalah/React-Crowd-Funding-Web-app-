@@ -216,7 +216,7 @@ const ProjectUpdate = ({ projectId: initialProjectId }) => {
               </Form.Control.Feedback>
             </Form.Group>
 
-            <Button variant="primary" type="submit" disabled={loading}>
+            <Button variant="primary" type="submit" disabled={loading} onClick={() => setShowModal(false)}>
               {loading ? 'جاري التحديث...' : 'حفظ التغييرات'}
             </Button>
           </Form>
